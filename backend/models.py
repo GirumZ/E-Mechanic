@@ -11,9 +11,9 @@ class BaseModel(db.Model):
 class Symptom(BaseModel):
     __tablename__ = 'symptoms'
 
-    symptem_text = db.Column(db.String(255), nullable=False)
+    symptom_text = db.Column(db.String(255), nullable=False)
     sensation = db.Column(db.String(255), nullable=True)
-    followup_available = db.Column(db.Boolean, nullable=False, default=False)
+    followup_available = db.Column(db.Boolean, nullable=False)
 
     # Relationship with Question
     questions = db.relationship('Question', backref='symptom', lazy=True)
