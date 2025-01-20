@@ -14,8 +14,16 @@ migrate = Migrate(app, db)
 from models import *
 
 from routes.symptom_routes import symptom_bp
+from routes.question_routes import question_bp
+from routes.problem_routes import problem_bp
+from routes.tip_routes import tip_pb
+from routes.obd_routes import obd_bp
 
 app.register_blueprint(symptom_bp)
+app.register_blueprint(question_bp)
+app.register_blueprint(problem_bp)
+app.register_blueprint(tip_pb)
+app.register_blueprint(obd_bp)
 
 @app.route('/')
 def home():
