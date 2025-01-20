@@ -8,18 +8,18 @@ symptom_bp = Blueprint('symptom', __name__, url_prefix='/api/symptoms')
 def get_all_symptoms():
     symptoms = Symptom.query.all()
     return jsonify([{
-        'id': symptom.id,
+        'id': symptom.symptom_id,
         'symptom_text': symptom.symptom_text,
         'sensation': symptom.sensation,
         'followup_available': symptom.followup_available
     } for symptom in symptoms])
 
 # Fetch a specific symptom by ID
-@symptom_bp.route('/<int:id>', methods=['GET'])
-def get_symptom_by_id(id):
-    symptom = Symptom.query.get_or_404(id)
+@symptom_bp.route('/<int:symptom_id>', methods=['GET'])
+def get_symptom_by_id(symptom_id):
+    symptom = Symptom.query.get_or_404(symptom_id)
     return jsonify({
-        'id': symptom.id,
+        'id': symptom.symptom_id,
         'symptom_text': symptom.symptom_text,
         'sensation': symptom.sensation,
         'followup_available': symptom.followup_available
@@ -30,7 +30,7 @@ def get_symptom_by_id(id):
 def get_symptoms_by_sensation(sensation):
     symptoms = Symptom.query.filter_by(sensation=sensation).all()
     return jsonify([{
-        'id': symptom.id,
+        'id': symptom.symptom_id,
         'symptom_text': symptom.symptom_text,
         'sensation': symptom.sensation,
         'followup_available': symptom.followup_available
@@ -42,7 +42,7 @@ def get_symptoms_by_followup(available):
     followup = available.lower() == 'true'
     symptoms = Symptom.query.filter_by(followup_available=followup).all()
     return jsonify([{
-        'id': symptom.id,
+        'id': symptom.symptom_id,
         'symptom_text': symptom.symptom_text,
         'sensation': symptom.sensation,
         'followup_available': symptom.followup_available
@@ -62,10 +62,10 @@ def create_symptom():
     return jsonify({"message": "Symptom created successfully", "id": new_symptom.id}), 201
 
 # Update a symptom
-@symptom_bp.route('/<int:id>', methods=['PUT'])
-def update_symptom(id):
+@symptom_bp.route('/<int:symptom_id>', methods=['PUT'])
+def update_symptom(symptom_id):
     data = request.json
-    symptom = Symptom.query.get_or_404(id)
+    symptom = Symptom.query.get_or_404(symptom_id)
     symptom.symptom_text = data['symptom_text']
     symptom.sensation = data.get('sensation')
     symptom.followup_available = data.get('followup_available', False)
@@ -73,9 +73,9 @@ def update_symptom(id):
     return jsonify({"message": "Symptom updated successfully"})
 
 # Delete a symptom
-@symptom_bp.route('/<int:id>', methods=['DELETE'])
-def delete_symptom(id):
-    symptom = Symptom.query.get_or_404(id)
+@symptom_bp.route('/<int:symptom_id>', methods=['DELETE'])
+def delete_symptom(symptom_id):
+    symptom = Symptom.query.get_or_404(symptom_id)
     db.session.delete(symptom)
     db.session.commit()
     return jsonify({"message": "Symptom deleted successfully"})
