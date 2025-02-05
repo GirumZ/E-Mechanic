@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Mechanic</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap">
+    <link rel="stylesheet" href="styles/index.css">
+    <link rel="stylesheet" href="styles/troubleshoot.css">
+</head>
+<body>
+    <nav class="header-nav">
+        <h1 class="header-logo">E-Mechanic</h1>
+        <div class="hamburger" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+        <ul class="header-nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="troubleshoot.html">Troubleshoot</a></li>
+            <li><a href="#">OBD Codes</a></li>
+            <li><a href="#">Car Tips</a></li>
+            <li><a href="#">Car Parts</a></li>
+        </ul>
+    </nav>
+
+    <section class="troubleshoot-container">
+        <h2>Select the issue type</h2>
+        <div class="troubleshoot-options">
+            <div class="card" data-issue="hear">
+                <i class="fas fa-volume-up"></i>
+                <p>I can hear it</p>
+            </div>
+            <div class="card" data-issue="smell">
+                <i class="fas fa-smog"></i>
+                <p>I can smell it</p>
+            </div>
+            <div class="card" data-issue="feel">
+                <i class="fas fa-hand-paper"></i>
+                <p>I can feel it</p>
+            </div>
+            <div class="card" data-issue="see">
+                <i class="fas fa-eye"></i>
+                <p>I can see it</p>
+            </div>
+        </div>
+    </section>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
