@@ -12,7 +12,7 @@ body{
     color: white;
     display: flex;
     flex-direction: column;
-    gap: 40px;
+    
     
 }
 
@@ -48,6 +48,11 @@ body{
 .header-nav-links li a:hover {
     color: #f77f00;
     transform: scale(1.1);
+}
+
+.header-nav-links a.active {
+    color: #f77f00;
+    font-weight: bold;
 }
 
 /* Hamburger Menu Styling */
