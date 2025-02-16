@@ -34,6 +34,17 @@ def get_problems_by_question(question_id):
         'question_id': problem.question_id
     } for problem in problems])
 
+# Fetch problems by Symptom ID
+@problem_bp.route('/symptom/<int:symptom_id>', methods=['GET'])
+def get_problems_by_symptom(symptom_id):
+    problems = Problem.query.filter_by(symptom_id=symptom_id).all()
+    return jsonify([{
+        'id': problem.problem_id,
+        'problem_description': problem.problem_description,
+        'symptom_id': problem.symptom_id
+    } for problem in problems])
+
+
 # Create a new problem
 @problem_bp.route('/', methods=['POST'])
 def create_problem():
