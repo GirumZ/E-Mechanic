@@ -17,38 +17,57 @@ document.addEventListener("DOMContentLoaded", function () {
     const troubleshootOptions = document.querySelectorAll(".troubleshoot-options .card");
     const symptomsContainer = document.getElementById("symptoms-list");
     const followUpQuestionsContainer = document.getElementById("follow-up-questions");
+    let selectedSymptom = null; // Track selected symptom
 
-    // Function to fetch symptoms based on selected sense
     function fetchSymptoms(sense) {
         fetch(`http://localhost:5000/api/symptoms/sensation/${sense}`)
             .then(response => response.json())
             .then(data => {
-                // console.log(data);
                 displaySymptoms(data);
             })
             .catch(error => console.error("Error fetching symptoms:", error));
     }
 
-    // Function to display symptoms
     function displaySymptoms(symptoms) {
         symptomsContainer.innerHTML = ""; // Clear previous symptoms
+        followUpQuestionsContainer.innerHTML = ""; // Clear follow-up questions
+        selectedSymptom = null; // Reset selected symptom
+
+        const title = document.createElement("h3");
+        title.textContent = "Which symptom do you see on your car?";
+        title.classList.add("symptom-title"); // Optional: Add a class for styling
+        symptomsContainer.appendChild(title);
+
         symptoms.forEach(symptom => {
             const symptomItem = document.createElement("div");
             symptomItem.classList.add("symptom-item");
             symptomItem.textContent = symptom.symptom_text;
-            symptomItem.setAttribute("data-symptom-id", symptom.id); // Store symptom id for further use
+            symptomItem.setAttribute("data-symptom-id", symptom.id);
 
-            // Add event listener to handle symptom selection
             symptomItem.addEventListener("click", function () {
+                // Remove highlight from previous selection
+                if (selectedSymptom) {
+                    selectedSymptom.classList.remove("selected-symptom");
+                }
+
+                // Highlight the selected symptom
+                this.classList.add("selected-symptom");
+                selectedSymptom = this;
+
                 const symptomId = this.getAttribute("data-symptom-id");
-                fetchFollowUpQuestions(symptomId);
+
+                if (symptom.followup_available) {
+                    fetchFollowUpQuestions(symptomId);
+                } else {
+                    displayProblem(symptomId);
+                }
+                
             });
 
             symptomsContainer.appendChild(symptomItem);
         });
     }
 
-    // Function to fetch follow-up questions based on selected symptom
     function fetchFollowUpQuestions(symptomId) {
         fetch(`http://localhost:5000/api/questions/symptom/${symptomId}`)
             .then(response => response.json())
@@ -58,48 +77,71 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => console.error("Error fetching follow-up questions:", error));
     }
 
-    // Function to display follow-up questions
     function displayFollowUpQuestions(questions) {
         followUpQuestionsContainer.innerHTML = ""; // Clear previous follow-up questions
+
+        const title = document.createElement("h3");
+        title.textContent = "Which describes your problem best?";
+        title.classList.add("followup-title"); // Optional: Add a class for styling
+        followUpQuestionsContainer.appendChild(title);
+
         questions.forEach(question => {
             const questionItem = document.createElement("div");
             questionItem.classList.add("question-item");
             questionItem.textContent = question.question_text;
-            questionItem.setAttribute("data-question-id", question.id); // Store question id for further use
+            questionItem.setAttribute("data-question-id", question.id);
 
-            // Add event listener for selecting the answer
             questionItem.addEventListener("click", function () {
                 const questionId = this.getAttribute("data-question-id");
-                // Process answer selection (you could use a modal or input field for this)
-                displayResult(questionId); // Call function to display the result based on answer
+                displayResult(questionId);
             });
 
             followUpQuestionsContainer.appendChild(questionItem);
         });
     }
 
-    // Function to display the final result after follow-up question selection
     function displayResult(questionId) {
-        // Fetch the result based on the question and answer (this could be a yes/no or other response type)
         fetch(`http://localhost:5000/api/problems/question/${questionId}`)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
-                // Display result (problem description and solution)
-                const resultText = `Problem: ${data[0].problem_description}`;
-                alert(resultText); // Display result in an alert or modal
+                alert(`Problem: ${data[0].problem_description}`);
             })
             .catch(error => console.error("Error fetching result:", error));
     }
 
-    // Add event listeners to the sensation cards
+    function displayProblem(symptomId) {
+        fetch(`http://localhost:5000/api/problems/symptom/${symptomId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+                return response.text(); // Read as text first
+            })
+            .then(text => {
+    
+                try {
+                    const data = JSON.parse(text); // Try to parse JSON
+                    if (data.length > 0) {
+                        alert(`Problem: ${data[0].problem_description}`);
+                    } else {
+                        alert("No problem found for this symptom.");
+                    }
+                } catch (error) {
+                    console.error("Error parsing JSON:", error, "Response was:", text);
+                }
+            })
+            .catch(error => console.error("Error fetching result:", error));
+    }
+    
+
     troubleshootOptions.forEach(card => {
         card.addEventListener("click", function () {
-            const sense = this.getAttribute("data-type"); // Get the sense type (see, hear, feel, smell)
+            const sense = this.getAttribute("data-type");
             fetchSymptoms(sense);
         });
     });
 });
+
 
 
 function toggleMenu() {
