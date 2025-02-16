@@ -36,3 +36,48 @@
     font-size: 2rem;
     margin-bottom: 10px;
 }
+
+.symptom-followup{
+    /* background-color: grey; */
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    
+}
+
+.selected-symptom {
+    background-color: #ffbc58; /* Orange highlight */
+    color: black;
+    font-weight: bold;
+    padding: 5px;
+    border-radius: 5px 30px 30px 5px;
+    transition: 0.3s ease-in-out;
+}
+
+#symptoms-list{
+    width: 600px;
+    height: fit-content;
+    border: 1px solid white;
+    padding: 20px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.symptom-title{
+    color:#f77f00;
+    margin-bottom:20px;
+}
+
+#follow-up-questions{
+    width: 600px;
+    height: fit-content;
+    border: 1px solid white;
+    padding: 20px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.followup-title{
+    color:#f77f00;
+    margin-bottom:20px;
+}
