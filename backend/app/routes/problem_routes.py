@@ -31,6 +31,7 @@ def get_problems_by_question(question_id):
     return jsonify([{
         'id': problem.problem_id,
         'problem_description': problem.problem_description,
+        'solution': problem.solution,
         'question_id': problem.question_id
     } for problem in problems])
 
@@ -41,6 +42,7 @@ def get_problems_by_symptom(symptom_id):
     return jsonify([{
         'id': problem.problem_id,
         'problem_description': problem.problem_description,
+        'solution': problem.solution,
         'symptom_id': problem.symptom_id
     } for problem in problems])
 
