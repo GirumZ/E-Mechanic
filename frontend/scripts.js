@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
         fetch(`http://localhost:5000/api/problems/question/${questionId}`)
             .then(response => response.json())
             .then(data => {
-                alert(`Problem: ${data[0].problem_description}`);
+                alert(`Problem: ${data[0].problem_description}\nSolution: ${data[0].solution}`);
             })
             .catch(error => console.error("Error fetching result:", error));
     }
@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 try {
                     const data = JSON.parse(text); // Try to parse JSON
                     if (data.length > 0) {
-                        alert(`Problem: ${data[0].problem_description}`);
+                        alert(`Problem: ${data[0].problem_description}\nSolution: ${data[0].solution}`);
                     } else {
                         alert("No problem found for this symptom.");
                     }
