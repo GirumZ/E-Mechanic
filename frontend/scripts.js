@@ -147,3 +147,81 @@ document.addEventListener("DOMContentLoaded", function () {
 function toggleMenu() {
     document.querySelector(".header-nav-links").classList.toggle("active");
 }
+
+function openModal() {
+    document.getElementById("obdModal").style.display = "block";
+}
+
+function closeModal() {
+    document.getElementById("obdModal").style.display = "none";
+    document.getElementById("obdResult").innerHTML = "";
+    document.getElementById("obdInput").value = "";
+}
+
+async function lookupOBD() {
+    const obdCode = document.getElementById("obdInput").value.trim().toUpperCase();
+    const obdResult = document.getElementById("obdResult");
+
+    if (!obdCode) {
+        obdResult.innerHTML = `<div class="alert alert-danger">Please enter an OBD code.</div>`;
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:5000/api/obd/code/${obdCode}`);
+        
+        if (!response.ok) {
+            throw new Error("OBD Code not found.");
+        }
+
+        const data = await response.json();
+
+        if (data.description) {
+            obdResult.innerHTML = `<div class="alert alert-success">
+                <strong>${obdCode}:</strong> ${data.description}
+            </div>`;
+        } else {
+            obdResult.innerHTML = `<div class="alert alert-danger">OBD Code not found.</div>`;
+        }
+    } catch (error) {
+        obdResult.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
+    }
+}
+
+// Click event listeners for navbar link and hero card
+document.getElementById("obdNavLink").addEventListener("click", openModal);
+document.getElementById("obdHeroCard").addEventListener("click", openModal);
+
+// Close modal if clicking outside content
+window.onclick = function(event) {
+    const modal = document.getElementById("obdModal");
+    if (event.target === modal) {
+        closeModal();
+    }
+}
+
+async function fetchTip() {
+    try {
+        const response = await fetch('http://localhost:5000/api/tips/');
+        const tips = await response.json();
+        if (tips.length > 0) {
+            const randomTip = tips[Math.floor(Math.random() * tips.length)];
+            document.getElementById('tipShort').textContent = randomTip.tip_short;
+            document.getElementById('tipLong').textContent = randomTip.tip_long;
+        }
+        document.getElementById('tipBox').style.display = 'block';
+        document.getElementById('overlay').style.display = 'block';
+    } catch (error) {
+        console.error('Error fetching tips:', error);
+        document.getElementById('tipShort').textContent = 'Failed to load tip.';
+        document.getElementById('tipLong').textContent = '';
+    }
+}
+
+function closeTip() {
+    document.getElementById('tipBox').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
+}
+
+document.getElementById("car_tips_1").addEventListener("click", fetchTip);
+document.getElementById("car_tips_2").addEventListener("click", fetchTip);
