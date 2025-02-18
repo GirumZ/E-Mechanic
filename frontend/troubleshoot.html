@@ -19,8 +19,8 @@
         <ul class="header-nav-links">
             <li><a href="index.html">Home</a></li>
             <li><a href="troubleshoot.html">Troubleshoot</a></li>
-            <li><a href="#">OBD Codes</a></li>
-            <li><a href="#">Car Tips</a></li>
+            <li><a href="#" id="obdNavLink">OBD Codes</a></li>
+            <li><a href="#" onclick="fetchTip()">Car Tips</a></li>
             <li><a href="#">Car Parts</a></li>
         </ul>
     </nav>
@@ -60,6 +60,26 @@
         </div>
     </section>
     
+    <!-- Modal -->
+    <div id="obdModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3>OBD Code Lookup</h3>
+            <input type="text" id="obdInput" placeholder="Enter OBD Code (e.g., P0420)">
+            <button onclick="lookupOBD()">Search</button>
+            <div id="obdResult"></div>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="closeTip()"></div>
+    
+    <div class="tip-box" id="tipBox">
+        <button class="close-button" onclick="closeTip()">&times;</button>
+        <i class="fas fa-lightbulb icon yellow"></i>
+        <h3 id="tipShort">Fetching tip...</h3>
+        <p id="tipLong">...</p>
+        <button class="tip-button" onclick="fetchTip()">Get Another Tip</button>
+    </div>
 
     <script src="scripts.js"></script>
 </body>
