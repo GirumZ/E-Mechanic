@@ -29,6 +29,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function displaySymptoms(symptoms) {
+        symptomsContainer.style.display = "block";
+        followUpQuestionsContainer.style.display ="none";
         symptomsContainer.innerHTML = ""; // Clear previous symptoms
         followUpQuestionsContainer.innerHTML = ""; // Clear follow-up questions
         selectedSymptom = null; // Reset selected symptom
@@ -59,6 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (symptom.followup_available) {
                     fetchFollowUpQuestions(symptomId);
                 } else {
+                    // followUpQuestionsContainer.style.display = "none";
                     displayProblem(symptomId);
                 }
                 
@@ -78,6 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function displayFollowUpQuestions(questions) {
+        followUpQuestionsContainer.style.display = "block";
         followUpQuestionsContainer.innerHTML = ""; // Clear previous follow-up questions
 
         const title = document.createElement("h3");
