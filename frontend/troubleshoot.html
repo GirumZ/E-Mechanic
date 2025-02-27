@@ -60,10 +60,23 @@
         </div>
     </section>
     
-    <!-- Modal -->
-    <div id="obdModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
+
+    <!-- Results Modal-->
+    <div class="result-modal" id="resultModal">
+        <div class="result-modal-content">
+            <span class="close-result-modal">&times;</span>
+            <h2>Problem Details</h2>
+            <p id="problemDescription"></p>
+            <h2>Solution</h2>
+            <p id="solutionDescription"></p>
+            <button class="btn" onClick="window.location.href='troubleshoot.html'">Startover</button>
+        </div>
+    </div>
+
+    <!-- Obd Modal -->
+    <div id="obdModal" class="obd-modal">
+        <div class="obd-modal-content">
+            <span class="close-obd-modal" onclick="closeModal()">&times;</span>
             <h3>OBD Code Lookup</h3>
             <input type="text" id="obdInput" placeholder="Enter OBD Code (e.g., P0420)">
             <button onclick="lookupOBD()">Search</button>
@@ -71,6 +84,7 @@
         </div>
     </div>
 
+    <!-- Car tips Modal -->
     <div class="overlay" id="overlay" onclick="closeTip()"></div>
     
     <div class="tip-box" id="tipBox">
