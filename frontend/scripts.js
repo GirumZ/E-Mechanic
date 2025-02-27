@@ -68,6 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             symptomsContainer.appendChild(symptomItem);
+            symptomsContainer.scrollIntoView({ behavior: "smooth" });
         });
     }
 
@@ -83,7 +84,6 @@ document.addEventListener("DOMContentLoaded", function () {
     function displayFollowUpQuestions(questions) {
         followUpQuestionsContainer.style.display = "block";
         followUpQuestionsContainer.innerHTML = ""; // Clear previous follow-up questions
-
         const title = document.createElement("h3");
         title.textContent = "Which describes your problem best?";
         title.classList.add("followup-title"); // Optional: Add a class for styling
@@ -101,41 +101,80 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             followUpQuestionsContainer.appendChild(questionItem);
+            followUpQuestionsContainer.scrollIntoView({ behavior: "smooth" });
         });
     }
 
     function displayResult(questionId) {
         fetch(`http://localhost:5000/api/problems/question/${questionId}`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
-                alert(`Problem: ${data[0].problem_description}\nSolution: ${data[0].solution}`);
+                if (data.length > 0) {
+                    // Populate modal with data
+                    document.getElementById('problemDescription').textContent = data[0].problem_description;
+                    document.getElementById('solutionDescription').textContent = data[0].solution;
+    
+                    // Display the modal
+                    const modal = document.getElementById('resultModal');
+                    modal.style.display = 'block';
+    
+                    // Close modal when the close button is clicked
+                    modal.querySelector('.close-result-modal').onclick = function() {
+                        modal.style.display = 'none';
+                    };
+    
+                    // Close modal when clicking outside the modal content
+                    window.onclick = function(event) {
+                        if (event.target === modal) {
+                            modal.style.display = 'none';
+                        }
+                    };
+                } else {
+                    alert("No problem found for this question.");
+                }
             })
             .catch(error => console.error("Error fetching result:", error));
     }
-
+    
     function displayProblem(symptomId) {
+        followUpQuestionsContainer.style.display = "none";
         fetch(`http://localhost:5000/api/problems/symptom/${symptomId}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`Server error: ${response.status}`);
                 }
-                return response.text(); // Read as text first
+                return response.json();
             })
-            .then(text => {
-    
-                try {
-                    const data = JSON.parse(text); // Try to parse JSON
-                    if (data.length > 0) {
-                        alert(`Problem: ${data[0].problem_description}\nSolution: ${data[0].solution}`);
-                    } else {
-                        alert("No problem found for this symptom.");
-                    }
-                } catch (error) {
-                    console.error("Error parsing JSON:", error, "Response was:", text);
+            .then(data => {
+                if (data.length > 0) {
+                    // Populate modal with data
+                    document.getElementById('problemDescription').textContent = data[0].problem_description;
+                    document.getElementById('solutionDescription').textContent = data[0].solution;
+                    // Display the modal
+                    const modal = document.getElementById('resultModal');
+                    modal.style.display = 'block';
+                    // Close modal when the close button is clicked
+                    modal.querySelector('.close-result-modal').onclick = function() {
+                        modal.style.display = 'none';
+                    };
+                    // Close modal when clicking outside the modal content
+                    window.onclick = function(event) {
+                        if (event.target === modal) {
+                            modal.style.display = 'none';
+                        }
+                    };
+                } else {
+                    alert("No problem found for this symptom.");
                 }
             })
             .catch(error => console.error("Error fetching result:", error));
     }
+    
     
 
     troubleshootOptions.forEach(card => {
