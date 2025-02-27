@@ -42,7 +42,21 @@
     display: flex;
     justify-content: center;
     gap: 30px;
-    
+}
+
+@media (max-width: 900px) {
+    .symptom-followup{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+    }
+    #symptoms-list{
+        max-width: 320px;
+    }
+    #follow-up-questions{
+        max-width: 320px;
+    }
 }
 
 .selected-symptom {
@@ -59,6 +73,7 @@
     height: fit-content;
     border: 1px solid white;
     padding: 20px;
+    margin-bottom: 20px;
     border-radius: 20px;
     cursor: pointer;
     display: none;
@@ -74,6 +89,7 @@
     height: fit-content;
     border: 1px solid white;
     padding: 20px;
+    margin-bottom: 20px;
     border-radius: 20px;
     cursor: pointer;
     display: none;
